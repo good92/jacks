@@ -1,34 +1,33 @@
 name := "jacks"
 
-version := "2.1.2"
+version := "2.1.4"
 
 organization := "com.lambdaworks"
 
-scalaVersion := "2.10.0"
-
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
-
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.3.0-SNAPSHOT")
+scalaVersion := "2.10.1"
 
 libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core"  %   "jackson-databind"  % "2.1.2",
+      "com.fasterxml.jackson.core"  %   "jackson-databind"  % "2.1.4",
       "org.scalacheck"              %%  "scalacheck"        % "1.10.0"  % "test",
       "org.scalatest"               %   "scalatest_2.10.0"  % "1.8"     % "test"
 )
 
 scalacOptions ++= Seq("-unchecked", "-optimize")
-
 publishArtifact in Test := false
-
 publishMavenStyle       := true
 
-publishTo <<= version {
-      val nexus = "https://oss.sonatype.org/"
-      _.trim.endsWith("SNAPSHOT") match {
-        case false => Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-        case true  => Some("snapshots" at nexus + "content/repositories/snapshots")
-      }
-    }
+// ref: https://groups.google.com/forum/?fromgroups=#!topic/simple-build-tool/CJS8GvXO4j0
+//publishTo <<= version {
+//      val nexus = "https://oss.sonatype.org/"
+//      _.trim.endsWith("SNAPSHOT") match {
+//        case false => //Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+//                      Some( "Local Maven Repository" at """file:///W:/repository/""")
+//##  [error] (*:publish) java.lang.UnsupportedOperationException: URL repository only support HTTP PUT at the moment
+//        case true  => Some("snapshots" at nexus + "content/repositories/snapshots")
+//   }
+//}
+
+publishTo := Some(Resolver.file("file",  new File( """X:\repository""" )))
 
 pomIncludeRepository := { _ => false }
 
