@@ -244,6 +244,14 @@ class UntypedObjectDeserializerSuite extends JacksTestSuite {
   test("reading JSON array returns Scala List") {
     read[AnyRef]("[1, 2, 3]") should equal (List(1, 2, 3))
   }
+  
+  test("reading JSON array of array returns Scala List of List") {
+    read[AnyRef]("""[["a", "b", "c"],["d", "e", "f"]]""") should equal (List(List("a", "b", "c"),List("d", "e", "f")))
+  }
+
+  test("reading JSON array of array returns Scala List of List v2") {
+    read[AnyRef]("""[["/AAA/BBB/CCC/","foo"],["/EEE/FFF/GGG/","foo2"],["/EEE/FKF/GGG/","foo3"]]""") should equal (List(List("/AAA/BBB/CCC/","foo"),List("/EEE/FFF/GGG/","foo2"),List("/EEE/FKF/GGG/","foo3")))
+  }
 
   test("reading JSON array returns Java Array") {
     val r = mapper.reader(USE_JAVA_ARRAY_FOR_JSON_ARRAY).withType(classOf[AnyRef])
